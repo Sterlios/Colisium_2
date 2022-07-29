@@ -13,7 +13,7 @@ namespace Colisium_2
         public float Health { get; private set; }
         public int Armor { get; private set; }
         public int Damage { get; private set; }
-        public int DamageCount { get; private set; }
+        public int DamageCount { get; protected set; }
         public bool IsAlive => Health > 0;
         public string Class { get; }
         protected Random Random { get; }
