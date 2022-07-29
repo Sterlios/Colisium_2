@@ -9,19 +9,21 @@ namespace Colisium_2
         protected int AbilityChance;
         private int _damageSpreading;
 
-        public float Health { get; private set; }
+        public float Health { get; protected set; }
+        public int DamageCount { get; protected set; }
         public int Armor { get; private set; }
         public int Damage { get; private set; }
         public bool IsStun { get; private set; }
-        public int DamageCount { get; protected set; }
-        public bool IsAlive => Health > 0;
+        public float MaxHealth { get; }
         public string Class { get; }
         protected Random Random { get; }
+        public bool IsAlive => Health > 0;
 
         public BaseFighter(string fighterClass = "Базовый класс", float health = 1000, int armor = 20, int damage = 50, int damageCount = 1)
         {
             Class = fighterClass;
             Health = health;
+            MaxHealth = health;
             Armor = armor;
             Damage = damage;
             DamageCount = 1;
