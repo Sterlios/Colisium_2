@@ -8,7 +8,7 @@ namespace Colisium_2
     {
         public Warior() : base("Warior", 1200, 30, 40) { }
 
-        public override void Attack(BaseFighter enemy)
+        public override void Attack(BaseFighter enemy, bool isStunSuccess = false)
         {
             int precentage = 100;
             bool abilitySuccess = Random.Next(precentage) < AbilityChance;

@@ -7,12 +7,12 @@ namespace Colisium_2
     abstract class BaseFighter
     {
         protected int AbilityChance;
-        private bool _isStun;
         private int _damageSpreading;
 
         public float Health { get; private set; }
         public int Armor { get; private set; }
         public int Damage { get; private set; }
+        public bool IsStun { get; private set; }
         public int DamageCount { get; protected set; }
         public bool IsAlive => Health > 0;
         public string Class { get; }
@@ -26,7 +26,7 @@ namespace Colisium_2
             Damage = damage;
             DamageCount = 1;
             _damageSpreading = 10;
-            _isStun = false;
+            IsStun = false;
             Random = new Random();
             AbilityChance = 25;
         }
@@ -46,29 +46,31 @@ namespace Colisium_2
             }
         }
 
-        public virtual void Attack(BaseFighter enemy)
+        public virtual void Attack(BaseFighter enemy, bool isStunSuccess = false)
         {
             List<float> damageList = new List<float>();
             Random random = new Random();
 
-            if (_isStun)
+            if (IsStun)
             {
-                _isStun = false;
+                IsStun = false;
 
                 Console.WriteLine(Class + " оглушен");
             }
-
-            for (int i = 0; i < DamageCount; i++)
+            else
             {
-                int minDamage = Math.Min(Math.Abs(Damage - _damageSpreading), Math.Abs(Damage + _damageSpreading));
-                int maxDamage = Math.Max(Math.Abs(Damage - _damageSpreading), Math.Abs(Damage + _damageSpreading));
-                int calculatedDamage = random.Next(minDamage, maxDamage);
-                damageList.Add(calculatedDamage);
+                for (int i = 0; i < DamageCount; i++)
+                {
+                    int minDamage = Math.Min(Math.Abs(Damage - _damageSpreading), Math.Abs(Damage + _damageSpreading));
+                    int maxDamage = Math.Max(Math.Abs(Damage - _damageSpreading), Math.Abs(Damage + _damageSpreading));
+                    int calculatedDamage = random.Next(minDamage, maxDamage);
+                    damageList.Add(calculatedDamage);
 
-                Console.WriteLine(Class + " нанес " + calculatedDamage + " урона");
+                    Console.WriteLine(Class + " нанес " + calculatedDamage + " урона");
+                }
+
+                enemy.TakeDamage(new Attack(damageList, isStunSuccess));
             }
-
-            enemy.TakeDamage(new Attack(damageList));
         }
 
         public override string ToString()
@@ -80,7 +82,7 @@ namespace Colisium_2
 
         protected void TakeDamage(float damage, bool IsStunSuccess)
         {
-            _isStun = IsStunSuccess ? IsStunSuccess : _isStun;
+            IsStun = IsStunSuccess ? IsStunSuccess : IsStun;
 
             float precenage = 100;
             float calculatedDamage = (float)damage * (precenage - Armor) / precenage;
