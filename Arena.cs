@@ -21,8 +21,7 @@ namespace Colisium_2
 
             Console.WriteLine();
 
-            User user = new User();
-            ToChallengeFighters(user, out Fighter leftFighter, out Fighter rightFighter);
+            ChooseFighters(out Fighter leftFighter, out Fighter rightFighter);
 
             Console.WriteLine();
 
@@ -48,20 +47,20 @@ namespace Colisium_2
                 leftFighter.ShowInfo();
                 rightFighter.ShowInfo();
 
-                rightFighter.TakeDamage(leftFighter.ToAttack());
+                leftFighter.Attack(rightFighter);
 
                 if (rightFighter.IsAlive)
                 {
-                    leftFighter.TakeDamage(rightFighter.ToAttack());
+                    rightFighter.Attack(leftFighter);
                 }
 
                 Console.WriteLine();
             }
 
-            FinishFight(leftFighter, rightFighter);
+            ShowResult(leftFighter, rightFighter);
         }
 
-        private void FinishFight(Fighter leftFighter, Fighter rightFighter)
+        private void ShowResult(Fighter leftFighter, Fighter rightFighter)
         {
             leftFighter.ShowInfo();
             rightFighter.ShowInfo();
@@ -80,27 +79,27 @@ namespace Colisium_2
             }
         }
 
-        private void ToChallengeFighters(User user, out Fighter leftFighter, out Fighter rightFighter)
+        private void ChooseFighters(out Fighter leftFighter, out Fighter rightFighter)
         {
             Console.WriteLine("Выберите бойца слева");
-            leftFighter = ToChallengeFighter(user);
+            leftFighter = ChooseFighter();
 
             Console.WriteLine("Выберите бойца справа");
-            rightFighter = ToChallengeFighter(user);
+            rightFighter = ChooseFighter();
         }
 
-        private Fighter ToChallengeFighter(User user)
+        private Fighter ChooseFighter()
         {
             Fighter fighter = null;
-            string fighterName = user.GetAnwer();
-            
-            if(Enum.TryParse(fighterName, out FighterClass FighterClass))
+            string fighterName = Console.ReadLine();
+
+            if (Enum.TryParse(fighterName, out FighterClass FighterClass))
             {
                 fighter = new Fighter(FighterClass);
             }
             else
             {
-                fighter = ToChallengeFighter(user);
+                fighterName = Console.ReadLine();
             }
 
             return fighter;
@@ -112,7 +111,7 @@ namespace Colisium_2
 
             for(int i = 1; i < Enum.GetNames(typeof(FighterClass)).Length; i++)
             {
-                _fighters.Add(new Fighter((FighterClass)i));
+                _fighters.Add(new Fighter((FighterClass)));
             }
         }
     }

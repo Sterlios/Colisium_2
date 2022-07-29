@@ -4,28 +4,18 @@ using System.Text;
 
 namespace Colisium_2
 {
-    enum FighterClass
-    {
-        BaseFighter,
-        Warior,
-        Priest,
-        Assassin,
-        Viking,
-        IceMen
-    }
-
     class Fighter
     {
         private float _health;
         private int _armor;
         private int _damage;
         private int _damageCount;
-        private FighterClass _fighterClass;
+        private string _fighterClass;
         private int _damageSpreading;
         private bool _isStun;
         public bool IsAlive => _health > 0;
 
-        public Fighter(FighterClass fighterClass = FighterClass.BaseFighter, float health = 1000, int armor = 20, int damage = 50, int damageCount = 1)
+        public Fighter(string fighterClass = "Базовый класс", float health = 1000, int armor = 20, int damage = 50, int damageCount = 1)
         {
             _fighterClass = fighterClass;
             _health = health;
@@ -43,7 +33,7 @@ namespace Colisium_2
 
         public void TakeDamage(Attack attack)
         {
-            List<float> damageList = attack.GetDamage();
+            IReadOnlyList<float> damageList = attack.Damages;
             float precenage = 100;
             _isStun = attack.IsStunSuccess;
 
@@ -56,7 +46,7 @@ namespace Colisium_2
             }
         }
 
-        public Attack ToAttack()
+        public void Attack(Fighter enemy)
         {
             List<float> damageList = new List<float>();
             Random random = new Random();
@@ -77,7 +67,7 @@ namespace Colisium_2
                 Console.WriteLine(_fighterClass + " нанес " + calculatedDamage + " урона");
             }
 
-            return new Attack(damageList);
+            enemy.TakeDamage(new Attack(damageList));
         }
 
         public override string ToString()
