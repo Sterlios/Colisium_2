@@ -4,8 +4,9 @@ using System.Text;
 
 namespace Colisium_2
 {
-    class BaseFighter
+    abstract class BaseFighter
     {
+        protected int AbilityChance;
         private bool _isStun;
         private int _damageSpreading;
 
@@ -15,6 +16,7 @@ namespace Colisium_2
         public int DamageCount { get; private set; }
         public bool IsAlive => Health > 0;
         public string Class { get; }
+        protected Random Random { get; }
 
         public BaseFighter(string fighterClass = "Базовый класс", float health = 1000, int armor = 20, int damage = 50, int damageCount = 1)
         {
@@ -22,20 +24,11 @@ namespace Colisium_2
             Health = health;
             Armor = armor;
             Damage = damage;
-            DamageCount = damageCount;
+            DamageCount = 1;
             _damageSpreading = 10;
             _isStun = false;
-        }
-
-        public BaseFighter(BaseFighter fighter)
-        {
-            Class = fighter.Class;
-            Health = fighter.Health;
-            Armor = fighter.Armor;
-            Damage = fighter.Damage;
-            DamageCount = fighter.DamageCount;
-            _damageSpreading = 10;
-            _isStun = false;
+            Random = new Random();
+            AbilityChance = 25;
         }
 
         public void ShowInfo()
@@ -43,22 +36,17 @@ namespace Colisium_2
             Console.WriteLine(this); 
         }
 
-        public void TakeDamage(Attack attack)
+        public virtual void TakeDamage(Attack attack)
         {
             IReadOnlyList<float> damageList = attack.Damages;
-            float precenage = 100;
-            _isStun = attack.IsStunSuccess;
 
             foreach (float damage in damageList)
             {
-                float calculatedDamage = (float)damage * (precenage - Armor) / precenage;
-                Health -= calculatedDamage;
-
-                Console.WriteLine(Class + " получил " + calculatedDamage + " урона");
+                TakeDamage(damage, attack.IsStunSuccess);
             }
         }
 
-        public void Attack(BaseFighter enemy)
+        public virtual void Attack(BaseFighter enemy)
         {
             List<float> damageList = new List<float>();
             Random random = new Random();
@@ -69,6 +57,7 @@ namespace Colisium_2
 
                 Console.WriteLine(Class + " оглушен");
             }
+
             for (int i = 0; i < DamageCount; i++)
             {
                 int minDamage = Math.Min(Math.Abs(Damage - _damageSpreading), Math.Abs(Damage + _damageSpreading));
@@ -85,6 +74,19 @@ namespace Colisium_2
         public override string ToString()
         {
             return Class + " | Health: " + (int)Health + " | Armor: " + Armor + " | Damage: " + Damage;
+        }
+
+        public abstract BaseFighter ToCopy();
+
+        protected void TakeDamage(float damage, bool IsStunSuccess)
+        {
+            _isStun = IsStunSuccess ? IsStunSuccess : _isStun;
+
+            float precenage = 100;
+            float calculatedDamage = (float)damage * (precenage - Armor) / precenage;
+            Health -= calculatedDamage;
+
+            Console.WriteLine(Class + " получил " + calculatedDamage + " урона");
         }
     }
 }

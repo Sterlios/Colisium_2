@@ -101,7 +101,7 @@ namespace Colisium_2
                 {
                     if (fighter.Class.ToLower() == fighterClass.ToLower())
                     {
-                        chosenFighter = new BaseFighter(fighter);
+                        chosenFighter = fighter.ToCopy();
                         isCorrect = true;
                     }
                 }

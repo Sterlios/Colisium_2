@@ -6,6 +6,11 @@ namespace Colisium_2
 {
     class Warior : BaseFighter
     {
-        public Warior() : base("Warior", 1200, 30, 40, 2) { }
+        public Warior() : base("Warior", 1200, 30, 40) { }
+
+        public override BaseFighter ToCopy()
+        {
+            return new Warior();
+        }
     }
 }
