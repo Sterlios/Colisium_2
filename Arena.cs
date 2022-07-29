@@ -6,7 +6,7 @@ namespace Colisium_2
 {
     class Arena
     {
-        private List<Fighter> _fighters;
+        private List<BaseFighter> _fighters;
 
         public Arena()
         {
@@ -21,7 +21,7 @@ namespace Colisium_2
 
             Console.WriteLine();
 
-            ChooseFighters(out Fighter leftFighter, out Fighter rightFighter);
+            ChooseFighters(out BaseFighter leftFighter, out BaseFighter rightFighter);
 
             Console.WriteLine();
 
@@ -34,13 +34,13 @@ namespace Colisium_2
         {
             Console.WriteLine("Список доступных бойцов:");
 
-            foreach(Fighter fighter in _fighters)
+            foreach(BaseFighter fighter in _fighters)
             {
                 fighter.ShowInfo();
             }
         }
 
-        private void ToFight(Fighter leftFighter, Fighter rightFighter)
+        private void ToFight(BaseFighter leftFighter, BaseFighter rightFighter)
         {
             while(leftFighter.IsAlive && rightFighter.IsAlive)
             {
@@ -60,7 +60,7 @@ namespace Colisium_2
             ShowResult(leftFighter, rightFighter);
         }
 
-        private void ShowResult(Fighter leftFighter, Fighter rightFighter)
+        private void ShowResult(BaseFighter leftFighter, BaseFighter rightFighter)
         {
             leftFighter.ShowInfo();
             rightFighter.ShowInfo();
@@ -79,7 +79,7 @@ namespace Colisium_2
             }
         }
 
-        private void ChooseFighters(out Fighter leftFighter, out Fighter rightFighter)
+        private void ChooseFighters(out BaseFighter leftFighter, out BaseFighter rightFighter)
         {
             Console.WriteLine("Выберите бойца слева");
             leftFighter = ChooseFighter();
@@ -88,20 +88,20 @@ namespace Colisium_2
             rightFighter = ChooseFighter();
         }
 
-        private Fighter ChooseFighter()
+        private BaseFighter ChooseFighter()
         {
-            Fighter chosenFighter = null;
+            BaseFighter chosenFighter = null;
             bool isCorrect = false;
 
             while (isCorrect == false)
             {
                 string fighterClass = Console.ReadLine();
 
-                foreach(Fighter fighter in _fighters)
+                foreach(BaseFighter fighter in _fighters)
                 {
                     if (fighter.Class.ToLower() == fighterClass.ToLower())
                     {
-                        chosenFighter = new Fighter(fighter);
+                        chosenFighter = new BaseFighter(fighter);
                         isCorrect = true;
                     }
                 }
@@ -112,13 +112,13 @@ namespace Colisium_2
 
         private void InitializeFighters()
         {
-            _fighters = new List<Fighter>
+            _fighters = new List<BaseFighter>
             {
-                new Fighter("Assassin"),
-                new Fighter("Warior", 1200, 30, 40, 2),
-                new Fighter("Viking", 1300, 25, 43),
-                new Fighter("IceMen", 850, 30, 47),
-                new Fighter("Priest", 800, 10, 35)
+                new Assassin(),
+                new Warior(),
+                new Viking(),
+                new IceMen(),
+                new Priest()
             };
         }
     }

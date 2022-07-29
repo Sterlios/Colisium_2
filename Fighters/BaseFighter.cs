@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Colisium_2
 {
-    class Fighter
+    class BaseFighter
     {
         private bool _isStun;
         private int _damageSpreading;
@@ -16,7 +16,7 @@ namespace Colisium_2
         public bool IsAlive => Health > 0;
         public string Class { get; }
 
-        public Fighter(string fighterClass = "Базовый класс", float health = 1000, int armor = 20, int damage = 50, int damageCount = 1)
+        public BaseFighter(string fighterClass = "Базовый класс", float health = 1000, int armor = 20, int damage = 50, int damageCount = 1)
         {
             Class = fighterClass;
             Health = health;
@@ -27,7 +27,7 @@ namespace Colisium_2
             _isStun = false;
         }
 
-        public Fighter(Fighter fighter)
+        public BaseFighter(BaseFighter fighter)
         {
             Class = fighter.Class;
             Health = fighter.Health;
@@ -58,7 +58,7 @@ namespace Colisium_2
             }
         }
 
-        public void Attack(Fighter enemy)
+        public void Attack(BaseFighter enemy)
         {
             List<float> damageList = new List<float>();
             Random random = new Random();
