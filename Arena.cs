@@ -90,29 +90,36 @@ namespace Colisium_2
 
         private Fighter ChooseFighter()
         {
-            Fighter fighter = null;
-            string fighterName = Console.ReadLine();
+            Fighter chosenFighter = null;
+            bool isCorrect = false;
 
-            if (Enum.TryParse(fighterName, out FighterClass FighterClass))
+            while (isCorrect == false)
             {
-                fighter = new Fighter(FighterClass);
-            }
-            else
-            {
-                fighterName = Console.ReadLine();
+                string fighterClass = Console.ReadLine();
+
+                foreach(Fighter fighter in _fighters)
+                {
+                    if (fighter.Class.ToLower() == fighterClass.ToLower())
+                    {
+                        chosenFighter = new Fighter(fighter);
+                        isCorrect = true;
+                    }
+                }
             }
 
-            return fighter;
+            return chosenFighter;
         }
 
         private void InitializeFighters()
         {
-            _fighters = new List<Fighter>();
-
-            for(int i = 1; i < Enum.GetNames(typeof(FighterClass)).Length; i++)
+            _fighters = new List<Fighter>
             {
-                _fighters.Add(new Fighter((FighterClass)));
-            }
+                new Fighter("Assassin"),
+                new Fighter("Warior", 1200, 30, 40, 2),
+                new Fighter("Viking", 1300, 25, 43),
+                new Fighter("IceMen", 850, 30, 47),
+                new Fighter("Priest", 800, 10, 35)
+            };
         }
     }
 }

@@ -6,22 +6,34 @@ namespace Colisium_2
 {
     class Fighter
     {
-        private float _health;
-        private int _armor;
-        private int _damage;
-        private int _damageCount;
-        private string _fighterClass;
-        private int _damageSpreading;
         private bool _isStun;
-        public bool IsAlive => _health > 0;
+        private int _damageSpreading;
+
+        public float Health { get; private set; }
+        public int Armor { get; private set; }
+        public int Damage { get; private set; }
+        public int DamageCount { get; private set; }
+        public bool IsAlive => Health > 0;
+        public string Class { get; }
 
         public Fighter(string fighterClass = "Базовый класс", float health = 1000, int armor = 20, int damage = 50, int damageCount = 1)
         {
-            _fighterClass = fighterClass;
-            _health = health;
-            _armor = armor;
-            _damage = damage;
-            _damageCount = damageCount;
+            Class = fighterClass;
+            Health = health;
+            Armor = armor;
+            Damage = damage;
+            DamageCount = damageCount;
+            _damageSpreading = 10;
+            _isStun = false;
+        }
+
+        public Fighter(Fighter fighter)
+        {
+            Class = fighter.Class;
+            Health = fighter.Health;
+            Armor = fighter.Armor;
+            Damage = fighter.Damage;
+            DamageCount = fighter.DamageCount;
             _damageSpreading = 10;
             _isStun = false;
         }
@@ -39,10 +51,10 @@ namespace Colisium_2
 
             foreach (float damage in damageList)
             {
-                float calculatedDamage = (float)damage * (precenage - _armor) / precenage;
-                _health -= calculatedDamage;
+                float calculatedDamage = (float)damage * (precenage - Armor) / precenage;
+                Health -= calculatedDamage;
 
-                Console.WriteLine(_fighterClass + " получил " + calculatedDamage + " урона");
+                Console.WriteLine(Class + " получил " + calculatedDamage + " урона");
             }
         }
 
@@ -55,16 +67,16 @@ namespace Colisium_2
             {
                 _isStun = false;
 
-                Console.WriteLine(_fighterClass + " оглушен");
+                Console.WriteLine(Class + " оглушен");
             }
-            for (int i = 0; i < _damageCount; i++)
+            for (int i = 0; i < DamageCount; i++)
             {
-                int minDamage = Math.Min(Math.Abs(_damage - _damageSpreading), Math.Abs(_damage + _damageSpreading));
-                int maxDamage = Math.Max(Math.Abs(_damage - _damageSpreading), Math.Abs(_damage + _damageSpreading));
+                int minDamage = Math.Min(Math.Abs(Damage - _damageSpreading), Math.Abs(Damage + _damageSpreading));
+                int maxDamage = Math.Max(Math.Abs(Damage - _damageSpreading), Math.Abs(Damage + _damageSpreading));
                 int calculatedDamage = random.Next(minDamage, maxDamage);
                 damageList.Add(calculatedDamage);
 
-                Console.WriteLine(_fighterClass + " нанес " + calculatedDamage + " урона");
+                Console.WriteLine(Class + " нанес " + calculatedDamage + " урона");
             }
 
             enemy.TakeDamage(new Attack(damageList));
@@ -72,7 +84,7 @@ namespace Colisium_2
 
         public override string ToString()
         {
-            return _fighterClass + " | Health: " + (int)_health + " | Armor: " + _armor + " | Damage: " + _damage;
+            return Class + " | Health: " + (int)Health + " | Armor: " + Armor + " | Damage: " + Damage;
         }
     }
 }
