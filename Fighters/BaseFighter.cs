@@ -11,8 +11,8 @@ namespace Colisium_2
 
         public float Health { get; protected set; }
         public int DamageCount { get; protected set; }
+        public int Damage { get; protected set; }
         public int Armor { get; private set; }
-        public int Damage { get; private set; }
         public bool IsStun { get; private set; }
         public float MaxHealth { get; }
         public string Class { get; }
